@@ -651,45 +651,50 @@ with overview_tab:
                 )
                 st.plotly_chart(fig, use_container_width=True)
 
-                # 4. Trend over time
-                if datetime_cols and numeric_cols:
-                    st.markdown("#### Trend Over Time")
+        # 4. Trend over time
+        if datetime_cols and numeric_cols:
+            st.markdown("#### Trend Over Time")
 
-                    col1, col2 = st.columns(2)
+            col1, col2 = st.columns(2)
 
-                    with col1:
-                        selected_date = st.selectbox(
-                            "Date column",
-                            datetime_cols,
-                            key="overview_date"
-                        )
+            with col1:
+                selected_date = st.selectbox(
+                    "Date column",
+                    datetime_cols,
+                    key="overview_date"
+                )
 
-                    with col2:
-                        selected_value = st.selectbox(
-                            "Value column",
-                            numeric_cols,
-                            key="overview_trend_value"
-                        )
+            with col2:
+                selected_value = st.selectbox(
+                    "Value column",
+                    numeric_cols,
+                    key="overview_trend_value"
+                )
 
-                trend_df = preview_df[
-                    [selected_date, selected_value]
-                ].dropna()
+            trend_df = preview_df[
+                [selected_date, selected_value]
+            ].dropna()
 
-                if not trend_df.empty:
-                    trend_df = (
-                        trend_df.groupby(selected_date, as_index=False)
-                        [selected_value].sum()
-                        .sort_values(selected_date)
-                    )
+            if not trend_df.empty:
+                trend_df = (
+                    trend_df.groupby(selected_date, as_index=False)[selected_value]
+                    .sum()
+                    .sort_values(selected_date)
+                )
 
-                    fig = px.line(
-                        trend_df,
-                        x=selected_date,
-                        y=selected_value,
-                        markers=True,
-                        title=f"{selected_value} Over Time"
-                    )
-                    st.plotly_chart(fig, use_container_width=True)
+                fig = px.line(
+                    trend_df,
+                    x=selected_date,
+                    y=selected_value,
+                    markers=True,
+                    title=f"{selected_value} Over Time"
+                )
+                st.plotly_chart(fig, use_container_width=True)
+        else:
+            st.info(
+                "Trend chart requires at least one datetime column "
+                "and one numeric column."
+            )
 
 
     if st.session_state.latest_result:

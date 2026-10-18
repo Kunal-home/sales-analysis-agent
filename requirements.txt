@@ -6,3 +6,4 @@ python-dotenv
 ipykernel
 langchain_groq
 openpyxl
+plotly

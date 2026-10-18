@@ -9,7 +9,8 @@ def cleaning_executor(state: AgentState):
 
     cleaned_df = apply_cleaning(
         df,
-        cleaning_plan
+        cleaning_plan,
+        allow_outlier_changes=False,
     )
 
     return {
